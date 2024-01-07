@@ -18,8 +18,14 @@ nav = nav.set_index('date')
 
 fund = st.selectbox('fund', info[['Fund Name']])
 
+min_date, max_date = nav.index.min(), nav.index.max()
+start_date = st.sidebar.date_input('Start date', min_date)
+end_date = st.sidebar.date_input('End date', max_date)
+
 if fund:
-    df = nav[nav['name'] == fund]
+    df = nav[(nav.index >= pd.to_datetime(start_date)) & 
+             (nav.index <= pd.to_datetime(end_date)) & 
+             (nav['name'] == fund)]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df.index, y=df['nav'], mode='lines'))
