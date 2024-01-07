@@ -21,23 +21,28 @@ nav = nav.set_index('date')
 
 cat = st.multiselect('cat', info.cat.unique(), default=None)
 mgr = st.multiselect('mgr', info.mgr.unique(), default=None)
+selected_funds = st.multiselect('Select Funds', filtered_info['name'].unique())
 
 filtered_info = info
-
 if cat:
     filtered_info = filtered_info[filtered_info['cat'].isin(cat)]
 if mgr:
     filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
 
-selected_funds = st.multiselect('Select Funds', filtered_info['name'].unique())
 
-min_date = nav.index.min().to_pydatetime().date()
-max_date = nav.index.max().to_pydatetime().date()
+min_dates = []
+for fund in selected_funds:
+    fund_dates = nav[nav['name'] == fund]['date']
+    if not fund_dates.empty:
+        min_dates.append(fund_dates.min())
+min_date = max(min_dates) if min_dates else nav['date'].min()
+max_date = nav['date'].max()
 
 start_date, end_date = st.slider("Select Date Range", 
-                                 min_value=min_date, 
-                                 max_value=max_date, 
-                                 value=(min_date, max_date))
+                                 min_value=min_date.to_pydatetime().date(), 
+                                 max_value=max_date.to_pydatetime().date(), 
+                                 value=(min_date.to_pydatetime().date(), max_date.to_pydatetime().date()))
+
 
 fig = go.Figure()
 
@@ -56,8 +61,11 @@ for fund in selected_funds:
 
 # Update layout
 fig.update_layout(
+    xaxis=dict(rangeslider=dict(visible=True), type="date"),
     yaxis_title='Normalized NAV (%)',
-    title='NAV Comparison of Selected Funds'
+    title='NAV Comparison of Selected Funds',
+    legend=dict(orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5),
+    height=600 
 )
 
 # Plot
