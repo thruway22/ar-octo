@@ -24,6 +24,8 @@ nav = nav.set_index('date')
 cat = st.multiselect('cat', info.cat, default=None)
 mgr = st.multiselect('mgr', info.mgr, default=None)
 
+filtered_info = info
+
 if cat:
     filtered_info = filtered_info[filtered_info['cat'].isin(cat)]
 if mgr:
