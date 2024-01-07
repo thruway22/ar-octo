@@ -56,7 +56,6 @@ for fund in selected_funds:
 
 # Update layout
 fig.update_layout(
-    xaxis=dict(rangeslider=dict(visible=True), type="date"),
     yaxis_title='Normalized NAV (%)',
     title='NAV Comparison of Selected Funds'
 )
