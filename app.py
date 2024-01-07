@@ -18,15 +18,19 @@ nav = nav.set_index('date')
 
 fund = st.selectbox('fund', info[['Fund Name']])
 
-min_date, max_date = nav.index.min(), nav.index.max()
-start_date, end_date = st.slider("Select Date Range",
-    min_value=min_date, max_value=max_date, value=(min_date, max_date))
+min_date = nav.index.min().to_pydatetime().date()
+max_date = nav.index.max().to_pydatetime().date()
+
+start_date, end_date = st.slider("Select Date Range", 
+                                 min_value=min_date, 
+                                 max_value=max_date, 
+                                 value=(min_date, max_date))
 
 
 if fund:
-    df = nav[(nav.index >= pd.to_datetime(start_date)) & 
-             (nav.index <= pd.to_datetime(end_date)) & 
-             (nav['name'] == fund)]
+    df = nav[(nav.index.date >= start_date) & 
+            (nav.index.date <= end_date) & 
+            (nav['name'] == fund)]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df.index, y=df['nav'], mode='lines'))
