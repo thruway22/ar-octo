@@ -21,7 +21,7 @@ nav = nav.set_index('date')
 
 cat = st.multiselect('cat', info.cat.unique(), default=None)
 mgr = st.multiselect('mgr', info.mgr.unique(), default=None)
-selected_funds = st.multiselect('Select Funds', filtered_info['name'].unique())
+selected_funds = st.multiselect('Select Funds', info['name'].unique())
 
 filtered_info = info
 if cat:
