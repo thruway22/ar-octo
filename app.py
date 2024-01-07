@@ -32,17 +32,17 @@ if mgr:
 
 min_dates = []
 for fund in selected_funds:
-    fund_dates = nav[nav['name'] == fund]['date']
+    fund_dates = nav[nav['name'] == fund].index
     if not fund_dates.empty:
         min_dates.append(fund_dates.min())
-min_date = max(min_dates) if min_dates else nav['date'].min()
-max_date = nav['date'].max()
+min_date = max(min_dates) if min_dates else nav.index.min()
+max_date = nav.index.max()
 
+# Date range slider
 start_date, end_date = st.slider("Select Date Range", 
                                  min_value=min_date.to_pydatetime().date(), 
                                  max_value=max_date.to_pydatetime().date(), 
                                  value=(min_date.to_pydatetime().date(), max_date.to_pydatetime().date()))
-
 
 fig = go.Figure()
 
