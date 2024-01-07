@@ -19,8 +19,6 @@ nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
 nav['date'] = pd.to_datetime(nav['date'])
 nav = nav.set_index('date')
 
-
-#####
 cat = st.multiselect('cat', info.cat.unique(), default=None)
 mgr = st.multiselect('mgr', info.mgr.unique(), default=None)
 
@@ -32,8 +30,6 @@ if mgr:
     filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
 
 fund = st.selectbox('fund', filtered_info.name)
-
-st.radio('label', ['1Y', '3Y', '5Y', 'All'], horizontal=True)
 
 min_date = nav.index.min().to_pydatetime().date()
 max_date = nav.index.max().to_pydatetime().date()
@@ -53,15 +49,6 @@ fig.add_trace(go.Scatter(x=df.index, y=df['nav'], mode='lines'))
 
 fig.update_layout(
     xaxis=dict(
-        rangeselector=dict(
-            buttons=list([
-                dict(count=1, label="1m", step="month", stepmode="backward"),
-                dict(count=6, label="6m", step="month", stepmode="backward"),
-                dict(count=1, label="YTD", step="year", stepmode="todate"),
-                dict(count=1, label="1y", step="year", stepmode="backward"),
-                dict(step="all")
-            ])
-        ),
         rangeslider=dict(visible=True),
         type="date"
     )
