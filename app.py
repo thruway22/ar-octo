@@ -14,7 +14,7 @@ nav = pd.concat([nav1, nav2, nav3])
 st.write(nav.head())
 
 nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
-# nav['date'] = pd.to_datetime(nav['date'])
+nav['date'] = pd.to_datetime(nav['date'])
 # nav = nav.set_index('date')
 
 fund = st.selectbox('fund', info[['Fund Name']])
