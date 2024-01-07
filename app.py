@@ -21,8 +21,8 @@ nav = nav.set_index('date')
 
 
 #####
-cat = st.multiselect('cat', info.cat, default=None)
-mgr = st.multiselect('mgr', info.mgr, default=None)
+cat = st.multiselect('cat', info.cat.unique(), default=None)
+mgr = st.multiselect('mgr', info.mgr.unique(), default=None)
 
 filtered_info = info
 
