@@ -64,7 +64,7 @@ for fund in selected_funds:
 fig.update_layout(
     yaxis_title='Normalized NAV (%)',
     title='NAV Comparison of Selected Funds',
-    legend=dict(orientation="h", yanchor="bottom", y=-1, xanchor="center", x=0.5),
+    legend=dict(orientation="h", yanchor="bottom", y=-0.5, xanchor="center", x=0.5),
     height=700
 )
 
