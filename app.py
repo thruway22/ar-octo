@@ -19,8 +19,9 @@ nav = nav.set_index('date')
 fund = st.selectbox('fund', info[['Fund Name']])
 
 min_date, max_date = nav.index.min(), nav.index.max()
-start_date = st.sidebar.date_input('Start date', min_date)
-end_date = st.sidebar.date_input('End date', max_date)
+start_date, end_date = st.slider("Select Date Range",
+    min_value=min_date, max_value=max_date, value=(min_date, max_date))
+
 
 if fund:
     df = nav[(nav.index >= pd.to_datetime(start_date)) & 
