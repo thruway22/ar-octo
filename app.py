@@ -5,6 +5,9 @@ import plotly.graph_objects as go
 st.title('Test')
 
 info = pd.read_csv('info.csv')
+info.columns = ['mgr', 'name', 'code', 'date', 'cat', 'short_name',
+                'sub_cat', 'obj', 'bm', 'risk', 'inception_price',
+                'unit_holder', 'investment']
 
 nav1 = pd.read_csv('nav1.csv')
 nav2 = pd.read_csv('nav2.csv')
@@ -16,7 +19,17 @@ nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
 nav['date'] = pd.to_datetime(nav['date'])
 nav = nav.set_index('date')
 
-fund = st.selectbox('fund', info[['Fund Name']])
+
+#####
+cat = st.multiselect('cat', info.cat, default=None)
+mgr = st.multiselect('mgr', info.mgr, default=None)
+
+if cat:
+    filtered_info = filtered_info[filtered_info['cat'].isin(cat)]
+if mgr:
+    filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
+
+fund = st.selectbox('fund', filtered_info.name)
 
 st.radio('label', ['1Y', '3Y', '5Y', 'All'], horizontal=True)
 
