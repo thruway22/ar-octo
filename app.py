@@ -36,7 +36,7 @@ for fund in selected_funds:
     fund_dates = nav[nav['name'] == fund].index
     if not fund_dates.empty:
         min_dates.append(fund_dates.min())
-min_date = max(min_dates) if min_dates else nav.index.min()
+fund_min_date = max(min_dates) if min_dates else nav.index.min()
 max_date = nav.index.max()
 
 date_range_option = st.radio('Select Predefined Date Range',
