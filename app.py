@@ -12,18 +12,11 @@ nav3 = pd.read_csv('nav3.csv')
 nav = pd.concat([nav1, nav2, nav3])
 nav = nav.drop(0)
 
-st.write(nav.head())
-
 nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
 nav['date'] = pd.to_datetime(nav['date'])
-st.write(nav.head())
+nav = nav.set_index('date')
 
-# nav = nav.set_index('date')
+fund = st.selectbox('fund', info[['Fund Name']])
 
-# fund = st.selectbox('fund', info[['Fund Name']])
-
-# st.write(nav.head())
-
-# if fund:
-#     fig = 
-#     st.pyplot(nav[nav['name'] == fund][['NAV (SAR)']])
+if fund:
+    st.pyplot(nav[nav['name'] == fund][['NAV (SAR)']].plot())
