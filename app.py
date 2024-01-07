@@ -29,7 +29,7 @@ if cat:
 if mgr:
     filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
 
-fund = st.selectbox('fund', filtered_info.name)
+selected_funds = st.multiselect('Select Funds', filtered_info['name'].unique())
 
 min_date = nav.index.min().to_pydatetime().date()
 max_date = nav.index.max().to_pydatetime().date()
@@ -39,19 +39,23 @@ start_date, end_date = st.slider("Select Date Range",
                                  max_value=max_date, 
                                  value=(min_date, max_date))
 
-
-df = nav[(nav.index.date >= start_date) & 
-        (nav.index.date <= end_date) & 
-        (nav['name'] == fund)]
-
 fig = go.Figure()
-fig.add_trace(go.Scatter(x=df.index, y=df['nav'], mode='lines'))
 
+for fund in selected_funds:
+    df = nav[(nav.index.date >= start_date) & 
+             (nav.index.date <= end_date) & 
+             (nav['name'] == fund)]
+    
+    df['normalized_nav'] = (df['nav'] / df['nav'].iloc[0]) * 100
+
+    fig.add_trace(go.Scatter(x=df.index, y=df['normalized_nav'], mode='lines', name=fund))
+
+# Update layout
 fig.update_layout(
-    xaxis=dict(
-        rangeslider=dict(visible=True),
-        type="date"
-    )
+    xaxis=dict(rangeslider=dict(visible=True), type="date"),
+    yaxis_title='Normalized NAV (%)',
+    title='NAV Comparison of Selected Funds'
 )
 
-st.plotly_chart(fig)    
+# Plot
+st.plotly_chart(fig) 
