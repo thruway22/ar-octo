@@ -18,6 +18,8 @@ nav = nav.set_index('date')
 
 fund = st.selectbox('fund', info[['Fund Name']])
 
+st.radio('label', ['1Y', '3Y', '5Y', 'All'], horizontal=True)
+
 min_date = nav.index.min().to_pydatetime().date()
 max_date = nav.index.max().to_pydatetime().date()
 
