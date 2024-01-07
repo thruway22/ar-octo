@@ -15,11 +15,13 @@ st.write(nav.head())
 
 nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
 nav['date'] = pd.to_datetime(nav['date'])
+st.write(nav.head())
+
 # nav = nav.set_index('date')
 
-fund = st.selectbox('fund', info[['Fund Name']])
+# fund = st.selectbox('fund', info[['Fund Name']])
 
-st.write(nav.head())
+# st.write(nav.head())
 
 # if fund:
 #     fig = 
