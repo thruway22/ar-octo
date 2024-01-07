@@ -11,6 +11,10 @@ nav2 = pd.read_csv('nav2.csv')
 nav3 = pd.read_csv('nav3.csv')
 nav = pd.concat([nav1, nav2, nav3])
 
+nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
+nav = nav.set_index('date')
+df['date'] = pd.to_datetime(df['date'])
+
 fund = st.selectbox('fund', info[['Fund Name']])
 
 st.write(nav.head())
