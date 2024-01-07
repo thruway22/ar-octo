@@ -19,4 +19,6 @@ nav = nav.set_index('date')
 fund = st.selectbox('fund', info[['Fund Name']])
 
 if fund:
-    st.pyplot(nav[nav['name'] == fund][['NAV (SAR)']].plot())
+    df = nav[nav['name'] = fund]
+    fig = plt.plot(df['nav'])
+    st.pyplot(fig)
