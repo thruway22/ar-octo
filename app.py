@@ -12,4 +12,4 @@ nav = pd.concat([nav1, nav2, nav3])
 
 fund = st.selectbox('fund', info[['Fund Name']])
 
-st.plot(nav[nav['name'] == fund].nav.plot())
+st.plot(nav[nav['name'] == fund][['NAV (SAR)']].plot())
