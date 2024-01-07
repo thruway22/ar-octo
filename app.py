@@ -11,6 +11,8 @@ nav2 = pd.read_csv('nav2.csv')
 nav3 = pd.read_csv('nav3.csv')
 nav = pd.concat([nav1, nav2, nav3])
 
+st.write(nav.head())
+
 nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']
 nav['date'] = pd.to_datetime(nav['date'])
 nav = nav.set_index('date')
