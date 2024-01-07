@@ -72,13 +72,18 @@ for fund in selected_funds:
     fund_df = nav[(nav['name'] == fund) & (nav.index.date >= start_date) & 
                   (nav.index.date <= end_date)]
     
-    # Calculate daily percentage change
-    fund_df['pct_change'] = fund_df['nav'].pct_change()
+    # # Calculate daily percentage change
+    # fund_df['pct_change'] = fund_df['nav'].pct_change()
 
-    # Calculate cumulative percentage change
-    cumulative_pct_change = (1 + fund_df['pct_change']).cumprod() - 1
+    # # Calculate cumulative percentage change
+    # cumulative_pct_change = (1 + fund_df['pct_change']).cumprod() - 1
 
-    fig.add_trace(go.Scatter(x=fund_df.index, y=cumulative_pct_change, mode='lines', name=fund))
+    # fig.add_trace(go.Scatter(x=fund_df.index, y=cumulative_pct_change, mode='lines', name=fund))
+
+    # Normalize NAV
+    normalized_nav = (fund_df['nav'] / fund_df['nav'].iloc[0]) * 100
+
+    fig.add_trace(go.Scatter(x=fund_df.index, y=normalized_nav, mode='lines', name=fund))
 
 
 # Update layout
