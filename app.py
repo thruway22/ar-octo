@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+
 
 st.title('Test')
 
@@ -18,8 +18,8 @@ nav = nav.set_index('date')
 
 fund = st.selectbox('fund', info[['Fund Name']])
 
-if fund:
-    df = nav[nav['name'] == fund]
-    fig, ax = plt.subplots()
-    df['nav'].plot(ax=ax)
-    st.pyplot(fig)
+# if fund:
+#     df = nav[nav['name'] == fund]
+#     fig, ax = plt.subplots()
+#     df['nav'].plot(ax=ax)
+#     st.pyplot(fig)
