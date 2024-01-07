@@ -39,6 +39,27 @@ for fund in selected_funds:
 min_date = max(min_dates) if min_dates else nav.index.min()
 max_date = nav.index.max()
 
+date_range_option = st.radio('Select Predefined Date Range',
+    ['all', '10y', '7y', '5y', '3y', '1y'], horizontal=True)
+
+today = pd.to_datetime('today').normalize()
+if date_range_option == '10y':
+    predefined_min_date = today - pd.DateOffset(years=10)
+elif date_range_option == '7y':
+    predefined_min_date = today - pd.DateOffset(years=7)
+elif date_range_option == '5y':
+    predefined_min_date = today - pd.DateOffset(years=5)
+elif date_range_option == '3y':
+    predefined_min_date = today - pd.DateOffset(years=3)
+elif date_range_option == '1y':
+    predefined_min_date = today - pd.DateOffset(years=1)
+else:
+    predefined_min_date = fund_min_date
+
+# Use the later of the two min dates (fund_min_date or predefined_min_date)
+min_date = max(fund_min_date, predefined_min_date)
+
+
 # Date range slider
 start_date, end_date = st.slider("Select Date Range", 
                                  min_value=min_date.to_pydatetime().date(), 
@@ -67,24 +88,6 @@ fig.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.5, xanchor="center", x=0.5),
     height=700
 )
-
-fig.update_layout(
-        xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1, label="1y", step="year", stepmode="backward"),
-                    dict(count=2, label="2y", step="year", stepmode="backward"),
-                    dict(count=3, label="3y", step="year", stepmode="backward"),
-                    dict(count=5, label="5y", step="year", stepmode="backward"),
-                    dict(count=7, label="7y", step="year", stepmode="backward"),
-                    dict(count=10, label="10y", step="year", stepmode="backward"),
-                    dict(step="all")
-                ])
-            ),
-            rangeslider=dict(visible=True),
-            type="date"
-        )
-    )
 
 # Plot
 st.plotly_chart(fig, use_container_width=True) 
