@@ -42,12 +42,11 @@ start_date, end_date = st.slider("Select Date Range",
 fig = go.Figure()
 
 for fund in selected_funds:
-    df = nav[(nav.index.date >= start_date) & 
-             (nav.index.date <= end_date) & 
-             (nav['name'] == fund)]
+    fund_df = nav[(nav['name'] == fund) & (nav.index.date >= start_date) & 
+                  (nav.index.date <= end_date)]
     
     normalized_nav = (fund_df['nav'] / fund_df['nav'].iloc[0]) * 100
-    
+
     fig.add_trace(go.Scatter(x=fund_df.index, y=normalized_nav, mode='lines', name=fund))
 
 # Update layout
