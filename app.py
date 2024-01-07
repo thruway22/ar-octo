@@ -46,9 +46,9 @@ for fund in selected_funds:
              (nav.index.date <= end_date) & 
              (nav['name'] == fund)]
     
-    df['normalized_nav'] = (df['nav'] / df['nav'].iloc[0]) * 100
-
-    fig.add_trace(go.Scatter(x=df.index, y=df['normalized_nav'], mode='lines', name=fund))
+    normalized_nav = (fund_df['nav'] / fund_df['nav'].iloc[0]) * 100
+    
+    fig.add_trace(go.Scatter(x=fund_df.index, y=normalized_nav, mode='lines', name=fund))
 
 # Update layout
 fig.update_layout(
