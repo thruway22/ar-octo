@@ -19,6 +19,6 @@ nav = nav.set_index('date')
 fund = st.selectbox('fund', info[['Fund Name']])
 
 if fund:
-    df = nav[nav['name'] = fund]
+    df = nav[nav['name'] == fund]
     fig = plt.plot(df['nav'])
     st.pyplot(fig)
