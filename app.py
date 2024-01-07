@@ -27,28 +27,27 @@ start_date, end_date = st.slider("Select Date Range",
                                  value=(min_date, max_date))
 
 
-if fund:
-    df = nav[(nav.index.date >= start_date) & 
-            (nav.index.date <= end_date) & 
-            (nav['name'] == fund)]
+df = nav[(nav.index.date >= start_date) & 
+        (nav.index.date <= end_date) & 
+        (nav['name'] == fund)]
 
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.index, y=df['nav'], mode='lines'))
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=df.index, y=df['nav'], mode='lines'))
 
-    fig.update_layout(
-        xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1, label="1m", step="month", stepmode="backward"),
-                    dict(count=6, label="6m", step="month", stepmode="backward"),
-                    dict(count=1, label="YTD", step="year", stepmode="todate"),
-                    dict(count=1, label="1y", step="year", stepmode="backward"),
-                    dict(step="all")
-                ])
-            ),
-            rangeslider=dict(visible=True),
-            type="date"
-        )
+fig.update_layout(
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all")
+            ])
+        ),
+        rangeslider=dict(visible=True),
+        type="date"
     )
+)
 
-    st.plotly_chart(fig)
+st.plotly_chart(fig)    
