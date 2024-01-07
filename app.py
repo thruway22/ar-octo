@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 st.title('Test')
 
@@ -13,4 +14,4 @@ nav = pd.concat([nav1, nav2, nav3])
 fund = st.selectbox('fund', info[['Fund Name']])
 
 if fund:
-    st.pyplot(nav[nav['name'] == fund][['NAV (SAR)']].plot())
+    st.pyplot(nav[nav['name'] == fund][['NAV (SAR)']])
