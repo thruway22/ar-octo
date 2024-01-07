@@ -21,13 +21,14 @@ nav = nav.set_index('date')
 
 cat = st.multiselect('cat', info.cat.unique(), default=None)
 mgr = st.multiselect('mgr', info.mgr.unique(), default=None)
-selected_funds = st.multiselect('Select Funds', info['name'].unique())
 
 filtered_info = info
 if cat:
     filtered_info = filtered_info[filtered_info['cat'].isin(cat)]
 if mgr:
     filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
+
+selected_funds = st.multiselect('Select Funds', filtered_info['name'].unique())
 
 
 min_dates = []
