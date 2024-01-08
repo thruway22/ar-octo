@@ -104,4 +104,5 @@ fig.update_layout(
 # Plot
 st.plotly_chart(fig, use_container_width=True) 
 
-st.write("Annualized Rate of Return for Selected Funds:", returns_df.sort_values('Annualized Return'))
+st.write("Annualized Rate of Return for Selected Funds:",
+    returns_df.sort_values('Annualized Return', ascending=False))
