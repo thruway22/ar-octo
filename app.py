@@ -90,7 +90,7 @@ for fund in selected_funds:
         annualized_returns.append({'Fund': fund, 'Annualized Return': annualized_return})
 
 # Create DataFrame for display
-returns_df = pd.DataFrame(annualized_returns)
+returns_df = pd.DataFrame(annualized_returns * 100)
 
 
 # Update layout
@@ -104,4 +104,4 @@ fig.update_layout(
 # Plot
 st.plotly_chart(fig, use_container_width=True) 
 
-st.write("Annualized Rate of Return for Selected Funds:", returns_df * 100)
+st.write("Annualized Rate of Return for Selected Funds:", returns_df.sortby('Annualized Return'))
