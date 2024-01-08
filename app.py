@@ -68,22 +68,29 @@ start_date, end_date = st.slider("Select Date Range",
 
 fig = go.Figure()
 
+annualized_returns = []
+
 for fund in selected_funds:
     fund_df = nav[(nav['name'] == fund) & (nav.index.date >= start_date) & 
                   (nav.index.date <= end_date)]
     
-    # # Calculate daily percentage change
-    # fund_df['pct_change'] = fund_df['nav'].pct_change()
+    # Calculate daily percentage change
+    fund_df['pct_change'] = fund_df['nav'].pct_change()
 
-    # # Calculate cumulative percentage change
-    # cumulative_pct_change = (1 + fund_df['pct_change']).cumprod() - 1
+    # Calculate cumulative percentage change
+    cumulative_pct_change = (1 + fund_df['pct_change']).cumprod() - 1
 
-    # fig.add_trace(go.Scatter(x=fund_df.index, y=cumulative_pct_change, mode='lines', name=fund))
+    fig.add_trace(go.Scatter(x=fund_df.index, y=cumulative_pct_change, mode='lines', name=fund))
 
-    # Normalize NAV
-    normalized_nav = (fund_df['nav'] / fund_df['nav'].iloc[0]) * 100
+    if not fund_df.empty:
+        initial_nav = fund_df.iloc[0]['nav']
+        final_nav = fund_df.iloc[-1]['nav']
+        num_years = (fund_df.index[-1] - fund_df.index[0]).days / 365.25
+        annualized_return = (final_nav / initial_nav) ** (1 / num_years) - 1
+        annualized_returns.append({'Fund': fund, 'Annualized Return': annualized_return})
 
-    fig.add_trace(go.Scatter(x=fund_df.index, y=normalized_nav, mode='lines', name=fund))
+# Create DataFrame for display
+returns_df = pd.DataFrame(annualized_returns)
 
 
 # Update layout
@@ -96,3 +103,5 @@ fig.update_layout(
 
 # Plot
 st.plotly_chart(fig, use_container_width=True) 
+
+st.write("Annualized Rate of Return for Selected Funds:", returns_df)
