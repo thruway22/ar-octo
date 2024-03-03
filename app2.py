@@ -65,6 +65,10 @@ start_date, end_date = st.slider("Select Date Range",
                                  max_value=max_date.to_pydatetime().date(),
                                  value=(min_date.to_pydatetime().date(), max_date.to_pydatetime().date()))
 
+# Update start_date and end_date based on the selected date range option
+start_date = min_date.to_pydatetime().date()
+end_date = max_date.to_pydatetime().date()
+
 # Filter the nav DataFrame based on the selected date range
 filtered_nav = nav[(nav.index.date >= start_date) & (nav.index.date <= end_date)]
 
