@@ -6,6 +6,7 @@ def load_data():
     info = pd.read_csv('info.csv')
     nav = pd.concat([pd.read_csv(f'nav{i}.csv') for i in range(1, 4)])
     nav = nav.drop(0)
+    nav.columns = ['mgr', 'name', 'nav', 'ccy', 'date', 'ytd', 'aum']  # Ensure the column names are correct
     nav['date'] = pd.to_datetime(nav['date'])
     return info, nav.set_index('date')
 
