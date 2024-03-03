@@ -62,11 +62,16 @@ filtered_nav = nav[(nav.index.date >= start_date) & (nav.index.date <= end_date)
 
 # Define a function to calculate annualized return
 def calculate_annualized_return(group):
+    if len(group) < 2:
+        return None  # Not enough data to calculate return
     initial_nav = group.iloc[0]['nav']
     final_nav = group.iloc[-1]['nav']
     num_years = (group.index[-1] - group.index[0]).days / 365.25
+    if num_years == 0:
+        return None  # Avoid division by zero
     annualized_return = (final_nav / initial_nav) ** (1 / num_years) - 1
     return annualized_return
+
 
 # Group by 'name' and apply the function to calculate annualized return for each fund
 annualized_returns = filtered_nav.groupby('name').apply(calculate_annualized_return)
