@@ -84,4 +84,4 @@ returns_df = annualized_returns.reset_index()
 returns_df.columns = ['Fund', 'Annualized Return']
 
 # Display the DataFrame
-st.dataframe(returns_df)
+st.dataframe(returns_df.sort_values('Annualized Return', ascending=False))
