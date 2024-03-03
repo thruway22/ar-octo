@@ -83,11 +83,12 @@ def calculate_annualized_return(group, min_years):
 # Group by 'name' and apply the function to calculate annualized return for each fund
 annualized_returns = filtered_nav.groupby('name').apply(lambda group: calculate_annualized_return(group, min_years=selected_period_years))
 
-# Convert the result to a DataFrame
-returns_df = pd.DataFrame(annualized_returns).reset_index()
+# Convert the result to a DataFrame and rename the columns
+returns_df = annualized_returns.to_frame(name='Annualized Return').reset_index()
 returns_df.columns = ['Fund', 'Annualized Return']
 
 # Display the DataFrame
 st.dataframe(returns_df.sort_values('Annualized Return', ascending=False))
+
 
 
