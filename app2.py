@@ -63,33 +63,25 @@ start_date, end_date = st.slider("Select Date Range",
 # Filter the nav DataFrame based on the selected date range and selected funds
 filtered_nav = nav[(nav.index.date >= start_date) & (nav.index.date <= end_date) & (nav['name'].isin(selected_funds))]
 
-# Calculate the duration of the selected period in years
-selected_period_years = (end_date - start_date).days / 365.25
-
 # Define a function to calculate annualized return
 def calculate_annualized_return(group, min_years):
     if len(group) < 2:
-        return None  # Not enough data to calculate return
+        return pd.DataFrame(columns=['Fund', 'Annualized Return'])  # Not enough data to calculate return
     initial_nav = group.iloc[0]['nav']
     final_nav = group.iloc[-1]['nav']
     num_years = (group.index[-1] - group.index[0]).days / 365.25
     if num_years < min_years:
-        return None  # Not enough data for the minimum threshold
+        return pd.DataFrame(columns=['Fund', 'Annualized Return'])  # Not enough data for the minimum threshold
     if num_years == 0:
-        return None  # Avoid division by zero
+        return pd.DataFrame(columns=['Fund', 'Annualized Return'])  # Avoid division by zero
     annualized_return = (final_nav / initial_nav) ** (1 / num_years) - 1
-    return annualized_return
+    return pd.DataFrame({'Fund': [group.name], 'Annualized Return': [annualized_return]})
+
+# Calculate the duration of the selected period in years
+selected_period_years = (end_date - start_date).days / 365.25
 
 # Group by 'name' and apply the function to calculate annualized return for each fund
-annualized_returns = filtered_nav.groupby('name').apply(lambda group: calculate_annualized_return(group, min_years=selected_period_years))
-
-# Reset the index and rename the columns
-returns_df = annualized_returns.reset_index()
-returns_df.columns = ['Fund', 'Annualized Return']
+annualized_returns = pd.concat(filtered_nav.groupby('name').apply(lambda group: calculate_annualized_return(group, min_years=selected_period_years)))
 
 # Display the DataFrame
-st.dataframe(returns_df.sort_values('Annualized Return', ascending=False))
-
-
-
-
+st.dataframe(annualized_returns.sort_values('Annualized Return', ascending=False))
