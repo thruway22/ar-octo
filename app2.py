@@ -28,11 +28,9 @@ if cat:
 if mgr:
     filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
 
-selected_funds = st.multiselect('Select Funds', filtered_info['name'].unique())
-
-
+# Calculate the minimum and maximum dates for the date range slider
 min_dates = []
-for fund in selected_funds:
+for fund in filtered_info['name']:
     fund_dates = nav[nav['name'] == fund].index
     if not fund_dates.empty:
         min_dates.append(fund_dates.min())
@@ -40,7 +38,7 @@ fund_min_date = max(min_dates) if min_dates else nav.index.min()
 max_date = nav.index.max()
 
 date_range_option = st.radio('Select Predefined Date Range',
-    ['all', '10y', '7y', '5y', '3y', '1y'], horizontal=True)
+                             ['all', '10y', '7y', '5y', '3y', '2y', '1y'], horizontal=True)
 
 today = pd.to_datetime('today').normalize()
 if date_range_option == '10y':
@@ -51,6 +49,8 @@ elif date_range_option == '5y':
     predefined_min_date = today - pd.DateOffset(years=5)
 elif date_range_option == '3y':
     predefined_min_date = today - pd.DateOffset(years=3)
+elif date_range_option == '2y':
+    predefined_min_date = today - pd.DateOffset(years=2)
 elif date_range_option == '1y':
     predefined_min_date = today - pd.DateOffset(years=1)
 else:
@@ -59,9 +59,29 @@ else:
 # Use the later of the two min dates (fund_min_date or predefined_min_date)
 min_date = max(fund_min_date, predefined_min_date)
 
-
 # Date range slider
-start_date, end_date = st.slider("Select Date Range", 
-                                 min_value=min_date.to_pydatetime().date(), 
-                                 max_value=max_date.to_pydatetime().date(), 
+start_date, end_date = st.slider("Select Date Range",
+                                 min_value=min_date.to_pydatetime().date(),
+                                 max_value=max_date.to_pydatetime().date(),
                                  value=(min_date.to_pydatetime().date(), max_date.to_pydatetime().date()))
+
+# Filter the nav DataFrame based on the selected date range
+filtered_nav = nav[(nav.index.date >= start_date) & (nav.index.date <= end_date)]
+
+# Define a function to calculate annualized return
+def calculate_annualized_return(group):
+    initial_nav = group.iloc[0]['nav']
+    final_nav = group.iloc[-1]['nav']
+    num_years = (group.index[-1] - group.index[0]).days / 365.25
+    annualized_return = (final_nav / initial_nav) ** (1 / num_years) - 1
+    return annualized_return
+
+# Group by 'name' and apply the function to calculate annualized return for each fund
+annualized_returns = filtered_nav.groupby('name').apply(calculate_annualized_return)
+
+# Convert the result to a DataFrame
+returns_df = annualized_returns.reset_index()
+returns_df.columns = ['Fund', 'Annualized Return']
+
+# Display the DataFrame
+st.dataframe(returns_df)
