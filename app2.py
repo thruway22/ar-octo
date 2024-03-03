@@ -28,6 +28,9 @@ if cat:
 if mgr:
     filtered_info = filtered_info[filtered_info['mgr'].isin(mgr)]
 
+# Get the list of fund names from the filtered info DataFrame
+selected_funds = filtered_info['name'].unique()
+
 # Determine the maximum date for the slider
 max_date = nav.index.max()
 
@@ -57,8 +60,8 @@ start_date, end_date = st.slider("Select Date Range",
                                  max_value=max_date.to_pydatetime().date(),
                                  value=(start_date.to_pydatetime().date(), max_date.to_pydatetime().date()))
 
-# Filter the nav DataFrame based on the selected date range
-filtered_nav = nav[(nav.index.date >= start_date) & (nav.index.date <= end_date)]
+# Filter the nav DataFrame based on the selected date range and selected funds
+filtered_nav = nav[(nav.index.date >= start_date) & (nav.index.date <= end_date) & (nav['name'].isin(selected_funds))]
 
 # Define a function to calculate annualized return
 def calculate_annualized_return(group):
@@ -71,7 +74,6 @@ def calculate_annualized_return(group):
         return None  # Avoid division by zero
     annualized_return = (final_nav / initial_nav) ** (1 / num_years) - 1
     return annualized_return
-
 
 # Group by 'name' and apply the function to calculate annualized return for each fund
 annualized_returns = filtered_nav.groupby('name').apply(calculate_annualized_return)
